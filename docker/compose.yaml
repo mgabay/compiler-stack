@@ -1,0 +1,9 @@
+services:
+  build-env:
+    image: compiler-stack
+    tty: true
+    labels:
+      NAME: "Intel compilers et dependencies for build system"
+    # Mount build directory
+    volumes:
+      - ./:/build
