@@ -20,6 +20,9 @@ repo_gpgcheck=1\n\
 gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB' \
 > /etc/yum.repos.d/oneAPI.repo
 
+# Install matlab
+COPY --from=matlab /opt/matlab/ /opt/matlab/
+
 # Install compilers and tools
 # Intel BaseKit for C and C++ compilers + MKL
 # Intel HPCKit for Fortran compiler 
@@ -42,9 +45,6 @@ RUN yum-config-manager --enable ol8_codeready_builder \
 # Much larger spread of intel tools can be installed with:
 #       intel-basekit-2024.2.x86_64 intel-hpckit-2024.2.x86_64
 # Intel configuration below needs to be updated for usage of additional packages
-
-# Install matlab
-COPY --from=matlab /opt/matlab/ /opt/matlab/
 
 ##### Environment variables #####
 # General
