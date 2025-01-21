@@ -59,7 +59,7 @@ jobs:
     - name: Build and push
       uses: docker/bake-action@v6
       with:
-        files: docker-bake.hcl
+        files: ./docker/ol8/docker-bake.hcl
         workdir: ./docker/ol8
         push: ${{ inputs.push }}
         pull: ${{ inputs.pull }}
