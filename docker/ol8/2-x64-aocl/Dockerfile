@@ -23,3 +23,5 @@ ENV C_INCLUDE_PATH="/opt/aocl/5.0.0/aocc/include:$C_INCLUDE_PATH"
 ENV CPLUS_INCLUDE_PATH="/opt/aocl/5.0.0/aocc/include:$CPLUS_INCLUDE_PATH"
 ENV LD_LIBRARY_PATH="/opt/aocl/5.0.0/aocc/lib:$LD_LIBRARY_PATH"
 ENV LIBRARY_PATH="/opt/aocl/5.0.0/aocc/lib:$LIBRARY_PATH"
+
+CMD ["bash"]

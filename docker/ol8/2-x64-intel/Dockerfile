@@ -50,3 +50,5 @@ ENV PATH='/opt/intel/oneapi/mpi/2021.13/bin:/opt/intel/oneapi/mkl/2024.2/bin/:/o
 ENV PKG_CONFIG_PATH='/opt/intel/oneapi/tbb/2021.13/env/../lib/pkgconfig:/opt/intel/oneapi/mpi/2021.13/lib/pkgconfig:/opt/intel/oneapi/mkl/2024.2/lib/pkgconfig:/opt/intel/oneapi/dpl/2022.6/lib/pkgconfig:/opt/intel/oneapi/compiler/2024.2/lib/pkgconfig:'
 ENV SETVARS_COMPLETED='1'
 ENV TBBROOT='/opt/intel/oneapi/tbb/2021.13/env/..'
+
+CMD ["bash"]

@@ -17,10 +17,9 @@ RUN yum-config-manager --enable ol8_codeready_builder \
       python3-sphinx texlive \
       texlive-anyfontsize texlive-dvipng texlive-fncychap texlive-titlesec texlive-tabulary texlive-framed texlive-wrapfig texlive-upquote texlive-needspace texlive-capt-of \
     && pip3 install numpydoc \
-    && /usr/sbin/alternatives --set python /usr/bin/python3 \
-    && alternatives --set java java-17-openjdk.x86_64 \
-    && alternatives --set javac java-17-openjdk.x86_64
+    && /usr/sbin/alternatives --set python /usr/bin/python3
 # Get R through oracle-epel-release-el8 instead of ol8_addons which only supports x86
+# Java version is set in architecture specific Dockerfiles through alternatives
 
 ##### Environment variables #####
 # General
@@ -28,3 +27,4 @@ ENV LANG=C.UTF-8
 
 # Java
 ENV JAVA_HOME="/usr/lib/jvm/java-17"
+# Also need to set alternatives for java and javac in architecture specific files
