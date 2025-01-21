@@ -43,6 +43,7 @@ jobs:
   build:
     needs: [setup]
     runs-on: ${{ needs.setup.outputs.runner }}
+
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -58,9 +59,9 @@ jobs:
 
     - name: Build and push
       uses: docker/bake-action@v6
+      working-directory: ./docker/ol8
       with:
         files: ./docker/ol8/docker-bake.hcl
-        workdir: ./docker/ol8
         push: ${{ inputs.push }}
         pull: ${{ inputs.pull }}
         targets: ${{ inputs.platform }}
