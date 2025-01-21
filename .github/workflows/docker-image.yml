@@ -12,12 +12,17 @@ on:
           - x64-intel
           - x64-amd
           - arm64-acfl
+      pull:
+        description: 'Pull base images'
+        required: true
+        default: true
+        type: boolean
   schedule:
     - cron: '0 1 * * *'
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       runner: ${{ steps.step1.outputs.runner }}
     steps:
@@ -33,7 +38,9 @@ jobs:
   build:
     needs: [setup]
     runs-on: ${{ needs.setup.outputs.runner }}
-  
+    defaults:
+      run:
+        working-directory: ./docker/ol8
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -51,5 +58,5 @@ jobs:
       uses: docker/bake-action@v6
       with:
         push: true
-        workdir: docker/ol8
+        pull: ${{ inputs.pull }}
         targets: ${{ inputs.platform }}
