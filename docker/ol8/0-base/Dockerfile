@@ -8,8 +8,8 @@ FROM oraclelinux:8
 
 # Enables additional repositories and install base tools
 RUN yum-config-manager --enable ol8_codeready_builder \
-    && yum-config-manager --enable ol8_addons \
     && yum update -y \
+    && yum install -y oracle-epel-release-el8 \
     && yum install -y \
       cmake make ninja-build vim \
       wget git \
@@ -20,6 +20,7 @@ RUN yum-config-manager --enable ol8_codeready_builder \
     && /usr/sbin/alternatives --set python /usr/bin/python3 \
     && alternatives --set java java-17-openjdk.x86_64 \
     && alternatives --set javac java-17-openjdk.x86_64
+# Get R through oracle-epel-release-el8 instead of ol8_addons which only supports x86
 
 ##### Environment variables #####
 # General

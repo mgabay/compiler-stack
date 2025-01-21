@@ -4,7 +4,7 @@ variable "TAG" {
 
 target "base" {
     dockerfile = "0-base/Dockerfile"
-    platforms = ["linux/amd64"]
+    platforms = ["linux/amd64","linux/arm64"]
 }
 
 target "x64-base" {
@@ -31,4 +31,13 @@ target "x64-intel" {
     }
     tags = ["docker.io/mgabay/compiler-stack:intel-${TAG}","docker.io/mgabay/compiler-stack:latest"]
     platforms = ["linux/amd64"]
+}
+
+target "arm64-acfl" {
+    dockerfile = "2-arm64-acfl/Dockerfile"
+    contexts = {
+        buildtools-base = "target:base"
+    }
+    tags = ["docker.io/mgabay/compiler-stack:arm-${TAG}"]
+    platforms = ["linux/arm64"]
 }
