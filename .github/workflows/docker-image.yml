@@ -17,6 +17,11 @@ on:
         required: true
         default: true
         type: boolean
+      push:
+        description: 'Push images'
+        required: true
+        default: true
+        type: boolean
   schedule:
     - cron: '0 1 * * *'
 
@@ -38,9 +43,6 @@ jobs:
   build:
     needs: [setup]
     runs-on: ${{ needs.setup.outputs.runner }}
-    defaults:
-      run:
-        working-directory: ./docker/ol8
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -57,6 +59,8 @@ jobs:
     - name: Build and push
       uses: docker/bake-action@v6
       with:
-        push: true
+        files: docker-bake.hcl
+        workdir: ./docker/ol8
+        push: ${{ inputs.push }}
         pull: ${{ inputs.pull }}
         targets: ${{ inputs.platform }}
