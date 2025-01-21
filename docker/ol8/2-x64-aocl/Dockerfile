@@ -8,7 +8,7 @@ FROM buildtools-matlab
 RUN rpm -i https://download.amd.com/developer/eula/aocl/aocl-5-0/aocl-linux-aocc-5.0.0-1.x86_64.rpm \
     && rpm -i https://download.amd.com/developer/eula/aocc/aocc-5-0/aocc-compiler-5.0.0-1.x86_64.rpm \
     && cd /opt/AMD/aocl/aocl-linux-aocc-5.0.0/aocc \
-    && bash set_aocl_interface_symlink.sh lp64
+    && bash set_aocl_interface_symlink.sh lp64 \
     && yum clean all
 # Skip sourcing amd-libs.cfg to load vars directly in ENV below
 
