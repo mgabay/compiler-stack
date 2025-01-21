@@ -3,12 +3,12 @@ variable "TAG" {
 }
 
 target "base" {
-    dockerfile = "0-base/Dockerfile"
+    dockerfile = "./0-base/Dockerfile"
     platforms = ["linux/amd64","linux/arm64"]
 }
 
 target "x64-base" {
-    dockerfile = "1-base-x64/Dockerfile"
+    dockerfile = "./1-base-x64/Dockerfile"
     contexts = {
         buildtools-base = "target:base"
     }
@@ -16,7 +16,7 @@ target "x64-base" {
 }
 
 target "x64-amd" {
-    dockerfile = "2-x64-aocl/Dockerfile"
+    dockerfile = "./2-x64-aocl/Dockerfile"
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
@@ -25,7 +25,7 @@ target "x64-amd" {
 }
 
 target "x64-intel" {
-    dockerfile = "2-x64-intel/Dockerfile"
+    dockerfile = "./2-x64-intel/Dockerfile"
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
@@ -34,7 +34,7 @@ target "x64-intel" {
 }
 
 target "arm64-acfl" {
-    dockerfile = "2-arm64-acfl/Dockerfile"
+    dockerfile = "./2-arm64-acfl/Dockerfile"
     contexts = {
         buildtools-base = "target:base"
     }
