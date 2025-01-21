@@ -65,3 +65,5 @@ jobs:
         push: ${{ inputs.push }}
         pull: ${{ inputs.pull }}
         targets: ${{ inputs.platform }}
+        set: |
+          *.context=docker/ol8
