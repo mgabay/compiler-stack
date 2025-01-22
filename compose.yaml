@@ -3,7 +3,7 @@ services:
     image: compiler-stack
     tty: true
     labels:
-      NAME: "Intel compilers et dependencies for build system"
+      NAME: "Compilers and dependencies for build system"
     # Mount build directory
     volumes:
       - ./:/build
