@@ -1,13 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
-# Base image based on ubi8 and including compilers and additional build tools
-# Based on Intel compilers official images
+# Base image for building compilers stack based on oracle linux 8
+# Image for x64 systems with Intel compiler and libraries
 
-# Includ matlab image to copy it
-FROM mathworks/matlab:r2024b as matlab
-
-# Based on Oracle Linux 8. No version pinning. Using latest for security reasons.
-# USE docker build --pull when building
-FROM oraclelinux:8
+FROM buildtools-matlab
 
 # Repository to install Intel(R) oneAPI Libraries
 RUN echo $'\
@@ -20,26 +15,11 @@ repo_gpgcheck=1\n\
 gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB' \
 > /etc/yum.repos.d/oneAPI.repo
 
-# Install matlab
-COPY --from=matlab /opt/matlab/ /opt/matlab/
-
-# Install compilers and tools
+# Install Intel compilers and libraries
 # Intel BaseKit for C and C++ compilers + MKL
 # Intel HPCKit for Fortran compiler 
-RUN yum-config-manager --enable ol8_codeready_builder \
-    && yum-config-manager --enable ol8_addons \
-    && yum update -y \
-    && yum install -y \
-      cmake make ninja-build vim \
-      wget git \
-	    python3 java-17-openjdk-devel maven R \
-      python3-sphinx texlive \
-      texlive-anyfontsize texlive-dvipng texlive-fncychap texlive-titlesec texlive-tabulary texlive-framed texlive-wrapfig texlive-upquote texlive-needspace texlive-capt-of \
-      intel-oneapi-compiler-fortran-2024.2 intel-oneapi-compiler-dpcpp-cpp-2024.2 intel-oneapi-mkl-devel-2024.2 \
-    && pip3 install numpydoc \
-    && /usr/sbin/alternatives --set python /usr/bin/python3 \
-    && alternatives --set java java-17-openjdk.x86_64 \
-    && alternatives --set javac java-17-openjdk.x86_64 \
+RUN yum update -y \
+    && yum install -y intel-oneapi-compiler-fortran-2024.2 intel-oneapi-compiler-dpcpp-cpp-2024.2 intel-oneapi-mkl-devel-2024.2 \
     && yum clean all
 
 # Much larger spread of intel tools can be installed with:
@@ -47,9 +27,6 @@ RUN yum-config-manager --enable ol8_codeready_builder \
 # Intel configuration below needs to be updated for usage of additional packages
 
 ##### Environment variables #####
-# General
-ENV LANG=C.UTF-8
-
 # Intel compiler
 ENV CLASSPATH='/opt/intel/oneapi/mpi/2021.13/share/java/mpi.jar'
 ENV CMAKE_PREFIX_PATH='/opt/intel/oneapi/tbb/2021.13/env/..:/opt/intel/oneapi/mkl/2024.2/lib/cmake:/opt/intel/oneapi/dpl/2022.6/lib/cmake/oneDPL:/opt/intel/oneapi/compiler/2024.2'
@@ -74,8 +51,4 @@ ENV PKG_CONFIG_PATH='/opt/intel/oneapi/tbb/2021.13/env/../lib/pkgconfig:/opt/int
 ENV SETVARS_COMPLETED='1'
 ENV TBBROOT='/opt/intel/oneapi/tbb/2021.13/env/..'
 
-# Matlab
-ENV PATH="$PATH:/opt/matlab/R2024b/bin/"
-
-# Java
-ENV JAVA_HOME="/usr/lib/jvm/java-17"
+CMD ["bash"]

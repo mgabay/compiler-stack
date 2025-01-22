@@ -2,16 +2,80 @@ name: Docker Image CI
 
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Target platform and compiler set'
+        required: true
+        default: 'x64-intel'
+        type: choice
+        options:
+          - x64-intel
+          - x64-amd
+          - arm64-acfl
+      no-cache:
+        description: 'Skip cache'
+        required: true
+        default: false
+        type: boolean
+      pull:
+        description: 'Pull base images'
+        required: true
+        default: false
+        type: boolean
+      push:
+        description: 'Push images'
+        required: true
+        default: false
+        type: boolean
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '5 1 * * *' #intel at 01:05
+    - cron: '5 2 * * *' #amd at 02:05
+    - cron: '5 3 * * *' #arm at 03:05
 
 jobs:
+  setup:
+    runs-on: ubuntu-24.04
+    outputs:
+      runner: ${{ steps.schedenv.outputs.runner || steps.arch.outputs.runner }}
+      target_platform: ${{ steps.schedenv.outputs.target_platform || steps.arch.outputs.target_platform }}
+      build-target: ${{ inputs.platform || steps.schedenv.outputs.build-target }}
+    steps:
+      - name: Check target architecture
+        id: arch
+        run: |
+          if [ ${{ inputs.platform }} == 'arm64-acfl' ]; then
+            echo "runner=ubuntu-24.04-arm" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/arm64" >> $GITHUB_OUTPUT
+          else
+            echo "runner=ubuntu-24.04" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/amd64" >> $GITHUB_OUTPUT
+          fi
+      - name: Set parameters for scheduled jobs
+        id: schedenv
+        if: ${{ github.event_name == 'schedule' }}
+        run:
+          if [ ${{ github.event.schedule }} == '5 3 * * *' ]; then
+            echo "Prepare arm64 build"
+            echo "runner=ubuntu-24.04-arm" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/arm64" >> $GITHUB_OUTPUT
+            echo "build-target=arm64-acfl" >> $GITHUB_OUTPUT
+          else
+            echo "Prepare x64 build"
+            echo "runner=ubuntu-24.04" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/amd64" >> $GITHUB_OUTPUT
+            if [ ${{ github.event.schedule }} == '5 2 * * *' ]; then
+              echo "Prepare amd64 build"
+              echo "build-target=x64-intel" >> $GITHUB_OUTPUT
+            else
+              echo "Prepare intel64 build"
+              echo "build-target=x64-amd" >> $GITHUB_OUTPUT
+            fi 
+          fi
+
+
   build:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      attestations: write
-      contents: read
+    needs: [setup]
+    runs-on: ${{ needs.setup.outputs.runner }}
 
     steps:
     - name: Check out the repo
@@ -23,24 +87,18 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v5.6.1
-      with:
-        context: git
-        images: mgabay/compiler-stack
-        tags: |
-            type=schedule,pattern=nightly
-            type=pep440,pattern={{major}}.{{minor}}
-            type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    - name: Build and push Docker image
-      id: push
-      uses: docker/build-push-action@v6
+    - name: Build and push
+      uses: docker/bake-action@v6
       with:
-          file: ./docker/ol8/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
+        files: ./docker/ol8/docker-bake.hcl
+        workdir: ./docker/ol8/
+        push: ${{ inputs.push || true }}
+        pull: ${{ inputs.pull || true }}
+        no-cache: ${{ inputs.no-cache || true }}
+        targets: ${{ needs.setup.outputs.build-target }}
+        set: |
+          *.context=docker/ol8
+          *.platform=${{ needs.setup.outputs.target_platform }}
