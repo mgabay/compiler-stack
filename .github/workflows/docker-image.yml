@@ -30,14 +30,17 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       runner: ${{ steps.step1.outputs.runner }}
+      target_platform: ${{ steps.step1.outputs.target_platform }}
     steps:
       - name: Check target architecture
         id: step1
         run: |
           if [ ${{ inputs.platform }} == 'arm64-acfl' ]; then
             echo "runner=ubuntu-24.04-arm" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/arm64" >> $GITHUB_OUTPUT
           else
             echo "runner=ubuntu-24.04" >> $GITHUB_OUTPUT
+            echo "target_platform=linux/amd64" >> $GITHUB_OUTPUT
           fi
   
   build:
@@ -67,3 +70,4 @@ jobs:
         targets: ${{ inputs.platform }}
         set: |
           *.context=docker/ol8
+          *.platform=${{ needs.setup.outputs.target_platform }}
