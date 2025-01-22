@@ -1,6 +1,6 @@
 services:
   build-env:
-    image: compiler-stack
+    image: mgabay/compiler-stack
     tty: true
     labels:
       NAME: "Compilers and dependencies for build system"
