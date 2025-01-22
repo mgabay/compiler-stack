@@ -16,6 +16,7 @@ RUN yum-config-manager --enable ol8_codeready_builder \
 	    python3 java-17-openjdk-devel maven R \
       python3-sphinx texlive \
       texlive-anyfontsize texlive-dvipng texlive-fncychap texlive-titlesec texlive-tabulary texlive-framed texlive-wrapfig texlive-upquote texlive-needspace texlive-capt-of \
+    && yum clean all \
     && pip3 install numpydoc \
     && /usr/sbin/alternatives --set python /usr/bin/python3
 # Get R through oracle-epel-release-el8 instead of ol8_addons which only supports x86
