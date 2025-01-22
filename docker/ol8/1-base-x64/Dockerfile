@@ -3,7 +3,8 @@
 # Additionally includes Matlab - Supported for x64 ONLY
 
 # Include matlab image to copy it
-FROM mathworks/matlab:r2024b AS matlab
+# Using R2021 as more recent versions of matlab require very recent libc
+FROM mathworks/matlab:r2021b AS matlab
 
 FROM buildtools-base
 
