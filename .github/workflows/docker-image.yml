@@ -55,19 +55,19 @@ jobs:
         if: ${{ github.event_name == 'schedule' }}
         run:
           if [ ${{ github.event.schedule }} == '5 3 * * *' ]; then
-            # arm64 build
+            echo "Prepare arm64 build"
             echo "runner=ubuntu-24.04-arm" >> $GITHUB_OUTPUT
             echo "target_platform=linux/arm64" >> $GITHUB_OUTPUT
             echo "build-target=arm64-acfl" >> $GITHUB_OUTPUT
           else
-            # Assume x64 build
+            echo "Prepare x64 build"
             echo "runner=ubuntu-24.04" >> $GITHUB_OUTPUT
             echo "target_platform=linux/amd64" >> $GITHUB_OUTPUT
             if [ ${{ github.event.schedule }} == '5 2 * * *' ]; then
-              # AMD build
+              echo "Prepare amd64 build"
               echo "build-target=x64-intel" >> $GITHUB_OUTPUT
             else
-              # Assume Intel build
+              echo "Prepare intel64 build"
               echo "build-target=x64-amd" >> $GITHUB_OUTPUT
             fi 
           fi
