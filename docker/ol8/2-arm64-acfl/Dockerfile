@@ -8,8 +8,7 @@ ARG DIST_VERS=RHEL-8
 
 # Interractive install through:
 #   bash <(curl -L https://developer.arm.com/-/cdn-downloads/permalink/Arm-Compiler-for-Linux/Package/install.sh)
-# requires Python3 (installed in base image) and glibc-devel (get through clang)
-RUN yum install clang \
+RUN yum -y install environment-modules python3 glibc-devel \
     && alternatives --set java java-17-openjdk.aarch64 \
     && alternatives --set javac java-17-openjdk.aarch64 \
     && curl -O https://developer.arm.com/-/cdn-downloads/permalink/Arm-Compiler-for-Linux/Version_${ACFL_VERS}/arm-compiler-for-linux_${ACFL_VERS}_${DIST_VERS}_aarch64.tar \
