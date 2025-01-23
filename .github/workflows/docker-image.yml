@@ -78,12 +78,24 @@ jobs:
     needs: [setup]
     runs-on: ${{ needs.setup.outputs.runner }}
     env:
-      PUSH: ${{ inputs.push || (inputs.push == '' && 'true') }}
-      PULL: ${{ inputs.pull || (inputs.pull == '' && 'true') }}
-      NO_CACHE: ${{ inputs.no-cache || (inputs.no-cache == '' && 'true') }}
+      PUSH: ${{ inputs.push }}
+      PULL: ${{ inputs.pull }}
+      NO_CACHE: ${{ inputs.no-cache }}
 
     steps:
-    - name: Setup
+    - name: Setup environment variables
+      run: |
+        if [ "$PUSH" == "" ]; then
+          echo "PUSH=true" >> $GITHUB_ENV
+        fi
+        if [ "$PULL" == "" ]; then
+          echo "PULL=true" >> $GITHUB_ENV
+        fi
+        if [ "$NO_CACHE" == "" ]; then
+          echo "NO_CACHE=true" >> $GITHUB_ENV
+        fi
+    
+    - name: Display env
       run: |
         echo "====================== Build Parameters ======================"
         echo "Parameters used for build are:"
