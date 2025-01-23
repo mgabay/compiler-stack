@@ -77,6 +77,10 @@ jobs:
   build:
     needs: [setup]
     runs-on: ${{ needs.setup.outputs.runner }}
+    env:
+      PUSH: ${{ inputs.push || (inputs.push == '' && 'true') }}
+      PULL: ${{ inputs.pull || (inputs.pull == '' && 'true') }}
+      NO_CACHE: ${{ inputs.no-cache || (inputs.no-cache == '' && 'true') }}
 
     steps:
     - name: Setup
@@ -84,9 +88,9 @@ jobs:
         echo "====================== Build Parameters ======================"
         echo "Parameters used for build are:"
         echo "  Runner: ${{ needs.setup.outputs.runner }}"
-        echo "  Push: ${{ inputs.push || 'true' }}"
-        echo "  Pull: ${{ inputs.pull || 'true' }}"
-        echo "  No-cache: ${{ inputs.no-cache || 'true' }}"
+        echo "  Push: $PUSH"
+        echo "  Pull: $PULL"
+        echo "  No-cache: $NO_CACHE"
         echo "  Build target: ${{ needs.setup.outputs.build-target }}"
         echo "  Target platform: ${{ needs.setup.outputs.target_platform }}"
         echo "=============================================================="
@@ -108,9 +112,9 @@ jobs:
       with:
         files: ./docker/ol8/docker-bake.hcl
         workdir: ./docker/ol8/
-        push: ${{ inputs.push || 'true' }}
-        pull: ${{ inputs.pull || 'true' }}
-        no-cache: ${{ inputs.no-cache || 'true' }}
+        push: ${{env.PUSH}}
+        pull: ${{env.PULL}}
+        no-cache: ${{env.NO_CACHE}}
         targets: ${{ needs.setup.outputs.build-target }}
         set: |
           *.context=docker/ol8
