@@ -13,7 +13,10 @@ COPY --from=matlab /opt/matlab/ /opt/matlab/
 
 # set java x86_64 version
 RUN alternatives --set java java-17-openjdk.x86_64 \
-    && alternatives --set javac java-17-openjdk.x86_64
+    && alternatives --set javac java-17-openjdk.x86_64 \
+    && wget https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux.zip \
+    && unzip ninja-linux.zip -d /opt/ninja \
+    && rm ninja-linux.zip
 
 # Matlab
-ENV PATH="$PATH:/opt/matlab/R2024b/bin/"
+ENV PATH="/opt/ninja:/opt/matlab/R2024b/bin/:$PATH"

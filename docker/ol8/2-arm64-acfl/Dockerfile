@@ -11,6 +11,9 @@ ARG DIST_VERS=RHEL-8
 RUN yum -y install environment-modules python3 glibc-devel \
     && alternatives --set java java-17-openjdk.aarch64 \
     && alternatives --set javac java-17-openjdk.aarch64 \
+    && wget https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux-aarch64.zip \
+    && unzip ninja-linux-aarch64.zip -d /opt/ninja \
+    && rm ninja-linux-aarch64.zip \
     && curl -O https://developer.arm.com/-/cdn-downloads/permalink/Arm-Compiler-for-Linux/Version_${ACFL_VERS}/arm-compiler-for-linux_${ACFL_VERS}_${DIST_VERS}_aarch64.tar \
     && tar xvf arm-compiler-for-linux_${ACFL_VERS}_${DIST_VERS}_aarch64.tar \
     && cd arm-compiler-for-linux_${ACFL_VERS}_${DIST_VERS} \
@@ -25,7 +28,8 @@ RUN yum -y install environment-modules python3 glibc-devel \
     && echo "[[ -s ~/.bashenv ]] && source ~/.bashenv" >> /root/.bash_profile \
     && echo "[[ -s ~/.bashenv ]] && source ~/.bashenv" >> /root/.bashrc \
     && yum clean all
-
+    
 ENV BASH_ENV=/root/.bashenv
+ENV PATH="/opt/ninja:$PATH"
 
 CMD ["bash"]

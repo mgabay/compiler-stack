@@ -11,7 +11,7 @@ RUN yum-config-manager --enable ol8_codeready_builder \
     && yum update -y \
     && yum install -y oracle-epel-release-el8 \
     && yum install -y \
-      cmake make ninja-build vim \
+      cmake make vim \
       wget git \
 	    python3 java-17-openjdk-devel maven R \
       python3-sphinx texlive \
