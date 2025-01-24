@@ -1,3 +1,7 @@
+variable "VERSION" {
+  default = "2024.2.0"
+}
+
 variable "TAG" {
   default = "2024.2"
 }
@@ -20,7 +24,7 @@ target "x64-amd" {
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:amd-${TAG}"]
+    tags = ["docker.io/mgabay/compiler-stack:${TAG}-amd64","docker.io/mgabay/compiler-stack:${VERSION}-amd64"]
     platforms = ["linux/amd64"]
 }
 
@@ -29,7 +33,7 @@ target "x64-intel" {
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:intel-${TAG}","docker.io/mgabay/compiler-stack:latest"]
+    tags = ["docker.io/mgabay/compiler-stack:${TAG}-intel64","docker.io/mgabay/compiler-stack:${VERSION}-intel64","docker.io/mgabay/compiler-stack:latest"]
     platforms = ["linux/amd64"]
 }
 
@@ -38,6 +42,6 @@ target "arm64-acfl" {
     contexts = {
         buildtools-base = "target:base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:arm-${TAG}"]
+    tags = ["docker.io/mgabay/compiler-stack:${TAG}-arm64","docker.io/mgabay/compiler-stack:${VERSION}-arm64"]
     platforms = ["linux/arm64"]
 }
