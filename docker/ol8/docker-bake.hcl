@@ -1,9 +1,17 @@
 variable "VERSION" {
-  default = "2024.2.0"
+  default = "2024.2.1"
 }
 
 variable "TAG" {
   default = "2024.2"
+}
+
+variable "NIGHTLY" {
+  default = false
+}
+
+variable "IMG_NAME" {
+  default = "docker.io/mgabay/compiler-stack"
 }
 
 target "base" {
@@ -24,7 +32,11 @@ target "x64-amd" {
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:${TAG}-amd64","docker.io/mgabay/compiler-stack:${VERSION}-amd64"]
+    tags = [
+        NIGHTLY ? "${IMG_NAME}:amd64-nightly" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${TAG}-amd64" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${VERSION}-amd64" : ""
+    ]
     platforms = ["linux/amd64"]
 }
 
@@ -33,7 +45,12 @@ target "x64-intel" {
     contexts = {
         buildtools-matlab = "target:x64-base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:${TAG}-intel64","docker.io/mgabay/compiler-stack:${VERSION}-intel64","docker.io/mgabay/compiler-stack:latest"]
+    tags = [
+        NIGHTLY ? "${IMG_NAME}:intel64-nightly" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${TAG}-intel64" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${VERSION}-intel64" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:latest" : ""
+    ]
     platforms = ["linux/amd64"]
 }
 
@@ -42,6 +59,10 @@ target "arm64-acfl" {
     contexts = {
         buildtools-base = "target:base"
     }
-    tags = ["docker.io/mgabay/compiler-stack:${TAG}-arm64","docker.io/mgabay/compiler-stack:${VERSION}-arm64"]
+    tags = [
+        NIGHTLY ? "${IMG_NAME}:arm64-nightly" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${TAG}-arm64" : "",
+        not(NIGHTLY) ? "${IMG_NAME}:${VERSION}-arm64" : ""
+    ]
     platforms = ["linux/arm64"]
 }
