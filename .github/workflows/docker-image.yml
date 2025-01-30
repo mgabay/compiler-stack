@@ -101,6 +101,8 @@ jobs:
         fi
         if [ ${{ github.event_name == 'schedule' }} ]; then
           echo "NIGHTLY=true" >> $GITHUB_ENV
+        else
+          echo "NIGHTLY=false" >> $GITHUB_ENV
         fi
     
     - name: Display env
