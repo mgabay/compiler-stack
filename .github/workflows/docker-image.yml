@@ -108,6 +108,7 @@ jobs:
         echo "  Push: $PUSH"
         echo "  Pull: $PULL"
         echo "  No-cache: $NO_CACHE"
+        echo "  Nightly: $NIGHTLY"
         echo "  Build target: ${{ needs.setup.outputs.build-target }}"
         echo "  Target platform: ${{ needs.setup.outputs.target_platform }}"
         echo "=============================================================="
