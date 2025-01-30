@@ -81,9 +81,10 @@ jobs:
       PUSH: ${{ inputs.push }}
       PULL: ${{ inputs.pull }}
       NO_CACHE: ${{ inputs.no-cache }}
+      NIGHTLY: ${{ github.event_name == 'schedule' }}
 
     steps:
-    - name: Setup environment variables
+    - name: Setup undefined environment variables
       run: |
         if [ "$PUSH" == "" ]; then
           echo "PUSH=true" >> $GITHUB_ENV
@@ -93,11 +94,6 @@ jobs:
         fi
         if [ "$NO_CACHE" == "" ]; then
           echo "NO_CACHE=true" >> $GITHUB_ENV
-        fi
-        if [ ${{ github.event_name == 'schedule' }} ]; then
-          echo "NIGHTLY=true" >> $GITHUB_ENV
-        else
-          echo "NIGHTLY=false" >> $GITHUB_ENV
         fi
     
     - name: Display env
