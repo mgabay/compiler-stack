@@ -27,11 +27,6 @@ on:
         required: true
         default: false
         type: boolean
-      suffix:
-        description: 'Suffix to add to tags'
-        required: false
-        default: ""
-        type: string
   schedule:
     - cron: '45 0 * * *' #intel at 00:45
     - cron: '45 2 * * *' #amd at 02:45
