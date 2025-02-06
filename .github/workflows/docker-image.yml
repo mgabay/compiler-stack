@@ -66,10 +66,10 @@ jobs:
             echo "target_platform=linux/amd64" >> $GITHUB_OUTPUT
             if [ "${{ github.event.schedule }}" == '45 2 * * *' ]; then
               echo "Prepare amd64 build"
-              echo "build-target=x64-intel" >> $GITHUB_OUTPUT
+              echo "build-target=x64-amd" >> $GITHUB_OUTPUT
             else
               echo "Prepare intel64 build"
-              echo "build-target=x64-amd" >> $GITHUB_OUTPUT
+              echo "build-target=x64-intel" >> $GITHUB_OUTPUT
             fi 
           fi
 
