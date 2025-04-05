@@ -15,7 +15,7 @@ on:
       no-cache:
         description: 'Skip cache'
         required: true
-        default: false
+        default: true
         type: boolean
       pull:
         description: 'Pull base images'
@@ -28,9 +28,9 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: '45 0 * * *' #intel at 00:45
-    - cron: '45 2 * * *' #amd at 02:45
-    - cron: '45 4 * * *' #arm at 04:45
+    - cron: '45 0 * * 6' #intel at 00:45 on Saturday
+    - cron: '45 0 * * 0' #amd at 00:45 on Sunday
+    - cron: '45 3 * * 0' #arm at 03:45 on Sunday
 
 jobs:
   setup:
