@@ -102,7 +102,7 @@ jobs:
           echo "NO_CACHE=true" >> $GITHUB_ENV
         fi
         if [ "$FREE_DISK" == "" ]; then
-          echo "FREE_DISK=false" >> $GITHUB_ENV
+          echo "FREE_DISK=true" >> $GITHUB_ENV
         fi
     
     - name: Display env
@@ -118,7 +118,7 @@ jobs:
         echo "  Build target: ${{ needs.setup.outputs.build-target }}"
         echo "  Target platform: ${{ needs.setup.outputs.target_platform }}"
         echo "=============================================================="
-        echo "Free space:"
+        echo "Free disk space:"
         df -h
         echo "=============================================================="
 
@@ -135,10 +135,6 @@ jobs:
         remove-cached-tools: 'true'
         remove-swapfile: 'true'
         verbose: 'true'
-
-    - name: Display disk free
-      if: env.FREE_DISK == 'true'
-      run: df -h
 
     - name: Check out the repo
       uses: actions/checkout@v4
