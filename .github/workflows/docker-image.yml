@@ -118,6 +118,9 @@ jobs:
         echo "  Build target: ${{ needs.setup.outputs.build-target }}"
         echo "  Target platform: ${{ needs.setup.outputs.target_platform }}"
         echo "=============================================================="
+        echo "Docker images:"
+        docker images
+        docker images -a
         echo "Free disk space:"
         df -h
         echo "=============================================================="
@@ -138,7 +141,9 @@ jobs:
 
     - name: Display disk free
       if: env.FREE_DISK == 'true'
-      run: df -h
+      run: |
+        docker images -a
+        df -h
 
     - name: Check out the repo
       uses: actions/checkout@v4
