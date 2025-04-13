@@ -136,6 +136,10 @@ jobs:
         remove-swapfile: 'true'
         verbose: 'true'
 
+    - name: Display disk free
+      if: env.FREE_DISK == 'true'
+      run: df -h
+
     - name: Check out the repo
       uses: actions/checkout@v4
 
