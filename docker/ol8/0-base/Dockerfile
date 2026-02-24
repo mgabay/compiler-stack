@@ -13,7 +13,9 @@ RUN yum-config-manager --enable ol8_codeready_builder \
     && yum install -y \
       cmake make vim \
       wget git \
-	    python3 java-17-openjdk-devel maven R \
+      java-1.8.0-openjdk-devel java-17-openjdk-devel java-21-openjdk-devel \
+      libatomic \
+      python3 maven R \
       python3-sphinx texlive \
       texlive-anyfontsize texlive-dvipng texlive-fncychap texlive-titlesec texlive-tabulary texlive-framed texlive-wrapfig texlive-upquote texlive-needspace texlive-capt-of \
     && yum clean all \
