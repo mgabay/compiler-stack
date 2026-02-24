@@ -3,8 +3,7 @@
 # Additionally includes Matlab - Supported for x64 ONLY
 
 # Include matlab image to copy it
-# Using R2021 as more recent versions of matlab require very recent libc
-FROM mathworks/matlab:r2021b AS matlab
+FROM mathworks/matlab:r2023a AS matlab
 
 FROM buildtools-base
 
@@ -19,4 +18,4 @@ RUN alternatives --set java java-17-openjdk.x86_64 \
     && rm ninja-linux.zip
 
 # Matlab
-ENV PATH="/opt/ninja:/opt/matlab/R2024b/bin/:$PATH"
+ENV PATH="/opt/ninja:/opt/matlab/R2023a/bin/:$PATH"
